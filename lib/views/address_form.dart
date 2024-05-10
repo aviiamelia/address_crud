@@ -5,28 +5,40 @@ import 'package:address_crud/provider/address_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class AddressForm extends StatelessWidget {
+class AddressForm extends StatefulWidget {
+  const AddressForm({super.key});
+
+  @override
+  State<AddressForm> createState() => _AddressFormState();
+}
+
+class _AddressFormState extends State<AddressForm> {
   final _form = GlobalKey<FormState>();
+  bool isUpdate = false;
   final Map<String, String> _formData = {};
-  AddressForm({super.key});
   void loadFormData(Address address) {
     if (address != null) {
-      _formData['id'] = address.id;
       _formData['street'] = address.street;
       _formData['cep'] = address.cep;
       _formData['state'] = address.state;
       _formData['number'] = address.number;
       _formData['city'] = address.city;
       _formData['complement'] = address.complement;
+      isUpdate = true;
+    }
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (ModalRoute.of(context)?.settings.arguments != null) {
+      final address = ModalRoute.of(context)?.settings.arguments as Address;
+      loadFormData(address);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    if (ModalRoute.of(context)?.settings.arguments != null) {
-      final address = ModalRoute.of(context)?.settings.arguments as Address;
-      loadFormData(address);
-    }
     return Scaffold(
       appBar: AppBar(
         title: const Text("Add new address"),
@@ -34,13 +46,30 @@ class AddressForm extends StatelessWidget {
           IconButton(
               onPressed: () {
                 _form.currentState?.save();
-                Provider.of<Addresses>(context, listen: false).put(Address(
-                    id: '10',
-                    cep: _formData['cep']!,
-                    street: _formData['street']!,
-                    city: _formData['city']!,
-                    number: _formData['number']!,
-                    state: _formData['state']!));
+                if (isUpdate == true) {
+                  final address =
+                      ModalRoute.of(context)?.settings.arguments as Address;
+                  Provider.of<Addresses>(context, listen: false).updateAddress(
+                      Address(
+                          id: address.id,
+                          cep: _formData['cep']!,
+                          street: _formData['street']!,
+                          city: _formData['city']!,
+                          number: _formData['number']!,
+                          state: _formData['state']!,
+                          complement: _formData['complement']!));
+                } else {
+                  Provider.of<Addresses>(context, listen: false).createAddress(
+                      Address(
+                          id: 0,
+                          cep: _formData['cep']!,
+                          street: _formData['street']!,
+                          city: _formData['city']!,
+                          number: _formData['number']!,
+                          state: _formData['state']!,
+                          complement: _formData['complement']!));
+                }
+
                 Navigator.of(context).pop();
               },
               icon: const Icon(Icons.save)),

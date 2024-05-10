@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
         ),
         routes: {
           AppRoutes.ADDRESS_FORM: (_) => AddressForm(),
-          AppRoutes.HOME: (_) => const AddressList()
+          AppRoutes.HOME: (_) => AddressList()
         },
       ),
     );

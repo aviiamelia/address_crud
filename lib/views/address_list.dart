@@ -4,8 +4,23 @@ import 'package:address_crud/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class AddressList extends StatelessWidget {
+class AddressList extends StatefulWidget {
   const AddressList({super.key});
+  @override
+  _AddressListState createState() => _AddressListState();
+}
+
+class _AddressListState extends State<AddressList> {
+  bool _isInit = true;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_isInit) {
+      Provider.of<Addresses>(context, listen: false).fetchAddresses();
+      _isInit = false;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

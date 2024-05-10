@@ -1,7 +1,7 @@
 // ignore_for_file: invalid_required_named_param
 
 class Address {
-  final String id;
+  final int id;
   final String street;
   final String cep;
   final String state;
@@ -10,7 +10,7 @@ class Address {
   final String number;
 
   const Address({
-    this.id = "",
+    required this.id,
     required this.cep,
     required this.street,
     required this.city,
@@ -18,4 +18,27 @@ class Address {
     required this.number,
     required this.state,
   });
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'street': street,
+      'cep': cep,
+      'state': state,
+      'city': city,
+      'complement': complement,
+      'number': number,
+    };
+  }
+
+  factory Address.fromJson(Map<String, dynamic> json) {
+    return Address(
+      id: json['id'],
+      street: json['street'],
+      cep: json['cep'],
+      state: json['state'],
+      city: json['city'],
+      complement: json['complement'],
+      number: json['number'],
+    );
+  }
 }
