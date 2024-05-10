@@ -1,6 +1,7 @@
 // ignore_for_file: invalid_required_named_param
 
 class Address {
+  final String id;
   final String street;
   final String cep;
   final String state;
@@ -9,6 +10,7 @@ class Address {
   final String number;
 
   const Address({
+    this.id = "",
     required this.cep,
     required this.street,
     required this.city,
